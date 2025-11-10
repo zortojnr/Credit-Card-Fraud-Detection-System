@@ -28,8 +28,8 @@ wheels/
 *.h5
 *.model
 
-# Data files (if too large, uncomment below)
-# *.csv
+# Data files (too large for GitHub)
+*.csv
 
 # IDE
 .vscode/
