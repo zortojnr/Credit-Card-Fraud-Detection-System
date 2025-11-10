@@ -32,7 +32,11 @@ The project uses a `creditcard.csv` file containing credit card transaction data
 - Transaction features (V1-V28, Time, Amount)
 - Target variable: `Class` (0 = Normal transaction, 1 = Fraudulent transaction)
 
-**Note**: Make sure the `creditcard.csv` file is in the same directory as `main.py`
+**Note**: 
+- The dataset file is not included in this repository due to size limitations
+- You need to provide your own `creditcard.csv` file in the project directory
+- Popular datasets can be found on Kaggle (e.g., "Credit Card Fraud Detection" dataset)
+- Make sure the `creditcard.csv` file is in the same directory as `main.py` before running the scripts
 
 ## Usage
 
