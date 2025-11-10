@@ -14,35 +14,173 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better styling
+# Custom CSS for professional styling
 st.markdown("""
     <style>
+    /* Main Header */
     .main-header {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #1f77b4;
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+        padding: 1rem 0;
     }
+    
+    /* Navigation Cards */
+    .nav-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .nav-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .nav-card h3 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 1.3rem;
+    }
+    
+    .nav-card p {
+        color: #5a6c7d;
+        margin: 0;
+        line-height: 1.6;
+    }
+    
+    /* Metric Cards */
     .metric-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.5rem;
+        border-radius: 12px;
         margin: 0.5rem 0;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+    
+    /* Alert Boxes */
     .fraud-alert {
-        background-color: #ffebee;
-        border-left: 5px solid #f44336;
-        padding: 1rem;
-        border-radius: 0.5rem;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        border-left: 5px solid #c92a2a;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+        color: white;
+        box-shadow: 0 4px 6px rgba(238, 90, 111, 0.3);
+    }
+    
+    .fraud-alert h2 {
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+    
+    .valid-alert {
+        background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+        border-left: 5px solid #2f9e44;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+        color: white;
+        box-shadow: 0 4px 6px rgba(64, 192, 87, 0.3);
+    }
+    
+    .valid-alert h2 {
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Section Headers */
+    .section-header {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid #667eea;
+    }
+    
+    /* Info Box */
+    .info-box {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border-left: 5px solid #2196f3;
+        margin: 1rem 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Feature List */
+    .feature-list {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         margin: 1rem 0;
     }
-    .valid-alert {
-        background-color: #e8f5e9;
-        border-left: 5px solid #4caf50;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin: 1rem 0;
+    
+    .feature-list li {
+        padding: 0.5rem 0;
+        color: #2c3e50;
+    }
+    
+    /* Quick Start Section */
+    .quick-start {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        color: white;
+        margin: 2rem 0;
+        box-shadow: 0 8px 16px rgba(245, 87, 108, 0.3);
+    }
+    
+    .quick-start h3 {
+        color: white;
+        margin-bottom: 1rem;
+        font-size: 1.8rem;
+    }
+    
+    .quick-start ol {
+        color: white;
+        font-size: 1.1rem;
+        line-height: 2;
+    }
+    
+    .quick-start li {
+        margin: 0.8rem 0;
+    }
+    
+    /* Sidebar Styling */
+    .css-1d391kg {
+        padding-top: 3rem;
+    }
+    
+    /* Hide Streamlit default elements */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Custom Button Styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -77,9 +215,35 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">💳 Credit Card Fraud Detection System</h1>', unsafe_allow_html=True)
     
-    # Sidebar navigation
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Choose a page", ["🏠 Home", "📊 Data Analysis", "🔍 Fraud Detection", "📈 Model Performance"])
+    # Sidebar navigation with professional styling
+    st.sidebar.markdown("""
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 1.5rem;
+                border-radius: 12px;
+                margin-bottom: 2rem;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h2 style="color: white; margin: 0; font-size: 1.5rem;">🧭 Navigation</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    page = st.sidebar.radio(
+        "Select a page:",
+        ["🏠 Home", "📊 Data Analysis", "🔍 Fraud Detection", "📈 Model Performance"],
+        label_visibility="collapsed"
+    )
+    
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("""
+    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-top: 2rem;">
+        <h4 style="color: #2c3e50; margin-bottom: 0.5rem;">💡 Quick Tips</h4>
+        <p style="color: #5a6c7d; font-size: 0.9rem; line-height: 1.6;">
+        • Use <strong>Data Analysis</strong> to explore patterns<br>
+        • <strong>Fraud Detection</strong> for real-time checks<br>
+        • <strong>Model Performance</strong> for metrics
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Load data and model
     data = load_data()
@@ -99,8 +263,10 @@ def main():
 
 def show_home_page(data):
     """Display home page with overview"""
-    st.header("Welcome to Credit Card Fraud Detection System")
+    # Welcome Section
+    st.markdown('<div class="section-header">Welcome to Credit Card Fraud Detection System</div>', unsafe_allow_html=True)
     
+    # Key Metrics
     col1, col2, col3, col4 = st.columns(4)
     
     total_transactions = len(data)
@@ -109,33 +275,104 @@ def show_home_page(data):
     fraud_percentage = (fraud_cases / total_transactions) * 100
     
     with col1:
-        st.metric("Total Transactions", f"{total_transactions:,}")
+        st.metric("Total Transactions", f"{total_transactions:,}", help="Total number of transactions in the dataset")
     with col2:
-        st.metric("Fraud Cases", f"{fraud_cases:,}", delta=f"{fraud_percentage:.2f}%")
+        st.metric("Fraud Cases", f"{fraud_cases:,}", delta=f"{fraud_percentage:.2f}%", delta_color="inverse", help="Number of fraudulent transactions detected")
     with col3:
-        st.metric("Valid Transactions", f"{valid_cases:,}")
+        st.metric("Valid Transactions", f"{valid_cases:,}", help="Number of legitimate transactions")
     with col4:
-        st.metric("Fraud Rate", f"{fraud_percentage:.3f}%")
+        st.metric("Fraud Rate", f"{fraud_percentage:.3f}%", help="Percentage of fraudulent transactions")
     
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
     
-    st.subheader("📋 About This System")
-    st.write("""
-    This Credit Card Fraud Detection System uses a **Random Forest Classifier** to identify 
-    potentially fraudulent transactions. The system provides:
+    # About Section
+    st.markdown('<div class="section-header">📋 About This System</div>', unsafe_allow_html=True)
     
-    - **Real-time Fraud Detection**: Analyze individual transactions instantly
-    - **Data Analysis**: Explore transaction patterns and statistics
-    - **Model Performance Metrics**: View detailed evaluation metrics
-    - **Visualizations**: Interactive charts and graphs
-    """)
+    st.markdown("""
+    <div class="info-box">
+        <p style="font-size: 1.1rem; line-height: 1.8; color: #2c3e50;">
+        This <strong>Credit Card Fraud Detection System</strong> uses advanced machine learning techniques 
+        with a <strong>Random Forest Classifier</strong> to identify potentially fraudulent transactions in real-time. 
+        The system provides comprehensive analysis tools and intuitive visualizations to help detect and prevent fraud.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.subheader("🚀 Quick Start")
-    st.write("""
-    1. Navigate to **📊 Data Analysis** to explore the dataset
-    2. Go to **🔍 Fraud Detection** to check if a transaction is fraudulent
-    3. Visit **📈 Model Performance** to see how well the model performs
-    """)
+    # Features
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="feature-list">
+            <h4 style="color: #667eea; margin-bottom: 1rem;">✨ Key Features</h4>
+            <ul style="list-style: none; padding: 0;">
+                <li>🔍 <strong>Real-time Fraud Detection</strong> - Analyze individual transactions instantly</li>
+                <li>📊 <strong>Data Analysis</strong> - Explore transaction patterns and statistics</li>
+                <li>📈 <strong>Model Performance Metrics</strong> - View detailed evaluation metrics</li>
+                <li>📉 <strong>Interactive Visualizations</strong> - Charts, graphs, and heatmaps</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="feature-list">
+            <h4 style="color: #667eea; margin-bottom: 1rem;">🛡️ Security Features</h4>
+            <ul style="list-style: none; padding: 0;">
+                <li>⚡ <strong>Fast Processing</strong> - Quick analysis of transaction data</li>
+                <li>🎯 <strong>High Accuracy</strong> - Advanced ML algorithms for precise detection</li>
+                <li>📱 <strong>User-Friendly Interface</strong> - Easy to navigate and use</li>
+                <li>💾 <strong>Batch Processing</strong> - Analyze multiple transactions at once</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Quick Start Guide
+    st.markdown("""
+    <div class="quick-start">
+        <h3>🚀 Quick Start Guide</h3>
+        <ol style="padding-left: 1.5rem;">
+            <li><strong>Navigate to 📊 Data Analysis</strong> to explore the dataset, view statistics, and analyze transaction patterns</li>
+            <li><strong>Go to 🔍 Fraud Detection</strong> to check if a transaction is fraudulent using manual input or CSV file upload</li>
+            <li><strong>Visit 📈 Model Performance</strong> to see how well the model performs with detailed metrics and confusion matrix</li>
+        </ol>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Navigation Cards
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown('<div class="section-header">📍 Navigation</div>', unsafe_allow_html=True)
+    
+    nav_col1, nav_col2, nav_col3 = st.columns(3)
+    
+    with nav_col1:
+        st.markdown("""
+        <div class="nav-card">
+            <h3>📊 Data Analysis</h3>
+            <p>Explore the dataset with interactive visualizations, statistics, and correlation analysis. 
+            Understand transaction patterns and data distribution.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with nav_col2:
+        st.markdown("""
+        <div class="nav-card">
+            <h3>🔍 Fraud Detection</h3>
+            <p>Check if transactions are fraudulent using manual input or batch processing. 
+            Get instant predictions with probability scores.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with nav_col3:
+        st.markdown("""
+        <div class="nav-card">
+            <h3>📈 Model Performance</h3>
+            <p>View comprehensive model evaluation metrics including accuracy, precision, recall, 
+            F1-score, and confusion matrix visualization.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 def show_data_analysis(data):
     """Display data analysis page"""
