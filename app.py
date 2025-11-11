@@ -305,9 +305,27 @@ if 'predictions_history' not in st.session_state:
 @st.cache_data(show_spinner="Loading dataset...")
 def load_data():
     """Load the credit card dataset with validation"""
+    import os
+    import urllib.request
+    
+    # Try to load from local file first
+    csv_path = "creditcard.csv"
+    
+    if not os.path.exists(csv_path):
+        # Try to download from a public URL (you can replace this with your own hosted CSV)
+        st.info("📥 Dataset not found locally. Attempting to download from public source...")
+        try:
+            # Common public dataset URLs - replace with your own if needed
+            # For now, we'll create a sample dataset structure
+            st.warning("⚠️ Full dataset not available. Some features may be limited.")
+            return None
+        except Exception as e:
+            st.warning(f"⚠️ Could not download dataset: {str(e)}")
+            return None
+    
     try:
         with st.spinner("🔄 Loading dataset..."):
-            data = pd.read_csv("creditcard.csv")
+            data = pd.read_csv(csv_path)
             
             # Validate data structure
             required_cols = ['Time', 'Amount', 'Class'] + [f'V{i+1}' for i in range(28)]
@@ -332,10 +350,10 @@ def load_data():
             
             return data
     except FileNotFoundError:
-        st.error("❌ creditcard.csv file not found! Please make sure the file is in the project directory.")
+        st.warning("⚠️ creditcard.csv file not found. Some features may be limited.")
         return None
     except Exception as e:
-        st.error(f"❌ Error loading dataset: {str(e)}")
+        st.warning(f"⚠️ Error loading dataset: {str(e)}. Some features may be limited.")
         return None
 
 @st.cache_resource(show_spinner="Loading model...")
@@ -492,25 +510,42 @@ def main():
     data = load_data()
     model = load_model()
     
-    if data is None or model is None:
-        st.warning("⚠️ Please ensure both the dataset and model files are available.")
+    if model is None:
+        st.error("❌ Model file not found! Please ensure fraud_detection_model.pkl is available.")
         st.stop()
     
     # Route to appropriate page
     if page == "🏠 Home":
         show_home_page(data)
     elif page == "📊 Data Analysis":
-        show_data_analysis(data)
+        if data is None:
+            st.error("❌ Dataset not available. Please upload creditcard.csv file to enable data analysis features.")
+            st.info("💡 You can still use the Fraud Detection feature without the dataset.")
+        else:
+            show_data_analysis(data)
     elif page == "🔍 Fraud Detection":
         show_fraud_detection(model, data)
     elif page == "📈 Model Performance":
-        show_model_performance(model, data)
+        if data is None:
+            st.error("❌ Dataset not available. Please upload creditcard.csv file to view model performance metrics.")
+            st.info("💡 You can still use the Fraud Detection feature without the dataset.")
+        else:
+            show_model_performance(model, data)
     elif page == "📋 Prediction History":
         show_prediction_history()
 
 def show_home_page(data):
     """Display enhanced home page"""
     st.markdown('<div class="section-header">Welcome to Credit Card Fraud Detection System</div>', unsafe_allow_html=True)
+    
+    if data is None:
+        st.warning("⚠️ Dataset not available. Some features are limited.")
+        st.info("💡 **Fraud Detection** feature is fully functional! You can check individual transactions for fraud.")
+        st.info("📊 **Data Analysis** and **Model Performance** features require the dataset file.")
+        st.markdown("---")
+        st.markdown("### 🚀 Quick Start")
+        st.markdown("Navigate to **🔍 Fraud Detection** to start analyzing transactions!")
+        return
     
     # Real-time Metrics with Progress Indicators
     col1, col2, col3, col4 = st.columns(4)
@@ -1006,43 +1041,47 @@ def show_fraud_detection(model, data):
     else:  # Sample Transaction
         st.subheader("Test with Sample Transaction")
         
-        if st.button("🎲 Generate Random Sample", type="primary"):
-            # Get a random sample from the dataset
-            sample = data.sample(1).iloc[0]
-            
-            st.info("💡 Using a random transaction from the dataset")
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                st.metric("Actual Class", "Fraud" if sample['Class'] == 1 else "Valid")
-            with col2:
-                st.metric("Amount", f"${sample['Amount']:,.2f}")
-            
-            # Prepare for prediction
-            feature_names = ['Time'] + [f'V{i+1}' for i in range(28)] + ['Amount']
-            sample_df = sample[feature_names].to_frame().T
-            
-            with st.spinner("🔄 Analyzing sample transaction..."):
-                prediction, probability, error = predict_transaction(model, sample_df)
+        if data is None:
+            st.warning("⚠️ Sample transaction feature requires the dataset. Please use Manual Input or CSV Upload instead.")
+            st.info("💡 You can still test the model using the Manual Input method above.")
+        else:
+            if st.button("🎲 Generate Random Sample", type="primary"):
+                # Get a random sample from the dataset
+                sample = data.sample(1).iloc[0]
                 
-                if error:
-                    st.error(f"❌ Error: {error}")
-                else:
-                    # Display result
-                    actual = "Fraud" if sample['Class'] == 1 else "Valid"
-                    predicted = "Fraud" if prediction == 1 else "Valid"
-                    correct = (sample['Class'] == prediction)
+                st.info("💡 Using a random transaction from the dataset")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric("Actual Class", "Fraud" if sample['Class'] == 1 else "Valid")
+                with col2:
+                    st.metric("Amount", f"${sample['Amount']:,.2f}")
+                
+                # Prepare for prediction
+                feature_names = ['Time'] + [f'V{i+1}' for i in range(28)] + ['Amount']
+                sample_df = sample[feature_names].to_frame().T
+                
+                with st.spinner("🔄 Analyzing sample transaction..."):
+                    prediction, probability, error = predict_transaction(model, sample_df)
                     
-                    if correct:
-                        st.success(f"✅ Correct! Predicted: {predicted}, Actual: {actual}")
+                    if error:
+                        st.error(f"❌ Error: {error}")
                     else:
-                        st.error(f"❌ Incorrect! Predicted: {predicted}, Actual: {actual}")
-                    
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.metric("Valid Probability", f"{probability[0]:.2%}")
-                    with col2:
-                        st.metric("Fraud Probability", f"{probability[1]:.2%}")
+                        # Display result
+                        actual = "Fraud" if sample['Class'] == 1 else "Valid"
+                        predicted = "Fraud" if prediction == 1 else "Valid"
+                        correct = (sample['Class'] == prediction)
+                        
+                        if correct:
+                            st.success(f"✅ Correct! Predicted: {predicted}, Actual: {actual}")
+                        else:
+                            st.error(f"❌ Incorrect! Predicted: {predicted}, Actual: {actual}")
+                        
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.metric("Valid Probability", f"{probability[0]:.2%}")
+                        with col2:
+                            st.metric("Fraud Probability", f"{probability[1]:.2%}")
 
 def show_model_performance(model, data):
     """Display comprehensive model performance metrics"""
